@@ -481,6 +481,7 @@ pci_alloc(void)
 int
 pci_init_internal(struct pci_access *a, int skip_method)
 {
+  printf("pci_init_internal method =%d\n",a->method);
   if (!a->error)
     a->error = pci_generic_error;
   if (!a->warning)
@@ -495,6 +496,7 @@ pci_init_internal(struct pci_access *a, int skip_method)
       if (a->method >= PCI_ACCESS_MAX || !pci_methods[a->method])
 	a->error("This access method is not supported.");
       a->methods = pci_methods[a->method];
+      printf("method name =%s help=%s\n",a->methods->name,a->methods->help);
     }
   else
     {
@@ -507,9 +509,11 @@ pci_init_internal(struct pci_access *a, int skip_method)
 	  if (skip_method == probe_sequence[i])
 	    continue;
 	  a->debug("Trying method %s...", m->name);
+    printf("Try method %s\n",m->name);
 	  if (m->detect(a))
 	    {
 	      a->debug("...OK\n");
+        printf("method =%s OK\n",m->name);
 	      a->methods = m;
 	      a->method = probe_sequence[i];
 	      break;
@@ -520,6 +524,7 @@ pci_init_internal(struct pci_access *a, int skip_method)
 	return 0;
     }
   a->debug("Decided to use %s\n", a->methods->name);
+  printf("Decided to use %s\n", a->methods->name);
   a->methods->init(a);
   return 1;
 }
@@ -527,6 +532,7 @@ pci_init_internal(struct pci_access *a, int skip_method)
 void
 pci_init_v35(struct pci_access *a)
 {
+  printf("pci_init_v35\n");
   if (!pci_init_internal(a, -1))
     a->error("Cannot find any working access method.");
 }

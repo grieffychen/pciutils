@@ -22,6 +22,7 @@ void
 pci_filter_init_v38(struct pci_access *a UNUSED, struct pci_filter *f)
 {
   memset((byte *) f, 0, sizeof(*f));
+  printf("pci_filter_init_v38\n");
   f->domain = f->bus = f->slot = f->func = -1;
   f->vendor = f->device = -1;
   f->device_class = -1;
@@ -268,6 +269,7 @@ void
 pci_filter_init_v30(struct pci_access *a, struct pci_filter_v30 *f)
 {
   struct pci_filter new;
+  printf("pci_filter_init_v30\n");
   pci_filter_init_v38(a, &new);
   pci_filter_export_v30(&new, f);
 }
